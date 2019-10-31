@@ -1,24 +1,48 @@
 <!doctype html>
-<title>Python Flask File Upload Example</title>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>mov classification</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+
 <h2>Select a file to upload</h2>
-<!-- <p>
-	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul class=flashes>
-		{% for message in messages %}
-		  <li>{{ message }}</li>
-		{% endfor %}
-		</ul>
-	  {% endif %}
-	{% endwith %}
-</p> -->
-<form method="post" action="/" enctype="multipart/form-data">
+
+<form method="post" action="http://ba79c317-12f2-4427-925d-e5f764e996de.southeastasia.azurecontainer.io/score" enctype="multipart/form-data" id="wavForm">
     <dl>
 		<p>
-			<input type="file" name="file" autocomplete="off" required>
+			<input id="upload_file" type="file" name="file" autocomplete="off" required>
 		</p>
     </dl>
     <p>
 		<input type="submit" value="Submit">
 	</p>
 </form>
+<div id="result"> </div>
+
+
+<script>
+
+// Attach a submit handler to the form
+$( "#wavForm" ).submit(function( event ) {
+ 
+  // Stop form from submitting normally
+  event.preventDefault();
+  var formData = new FormData(this);  
+  formData.append('file', document.getElementById('upload_file').files[0]);
+
+ $.ajax({
+       url : 'http://ba79c317-12f2-4427-925d-e5f764e996de.southeastasia.azurecontainer.io/score',
+       type : 'POST',
+       data : formData,
+       processData: false,  // tell jQuery not to process the data
+       contentType: false,  // tell jQuery not to set contentType
+       success : function(data) {
+           console.log(data);
+    		$( "#result" ).empty().append( data );
+                  }
+              });
+});
+ 
+
+</script>
